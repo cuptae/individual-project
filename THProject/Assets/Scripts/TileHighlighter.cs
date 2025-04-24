@@ -9,6 +9,9 @@ public class TileHighlighter : MonoBehaviour
     private Tilemap tilemap;
     [SerializeField]
     private GameObject highlight;
+    [SerializeField]
+    private OverlayTile overlayTile;
+
     private Vector3 lastHighlightPos;
 
 
@@ -23,8 +26,9 @@ public class TileHighlighter : MonoBehaviour
 
     void Update()
     {
-        TileHighlight();
         if(Input.GetMouseButton(0))
+            TileHighlight();
+        if(Input.GetMouseButton(1))
             GetCharacter();
     }
 
@@ -42,13 +46,14 @@ public class TileHighlighter : MonoBehaviour
         if(tilemap.HasTile(cellPos))
         {
             //셀 위치의 중심좌표를 월드 좌표로
-            highlight.transform.position  = tilemap.GetCellCenterWorld(cellPos)+TilemapManager.instance.offset;
-            lastHighlightPos = highlight.transform.position+TilemapManager.instance.offset;
+            highlight.transform.position  = tilemap.GetCellCenterWorld(cellPos)+TilemapManager.Instance.offset;
+            lastHighlightPos = highlight.transform.position+TilemapManager.Instance.offset;
         }
         else
         {
             highlight.transform.position = lastHighlightPos;
         }
+        Debug.Log(cellPos);
     }
 
     public void GetCharacter()
@@ -57,7 +62,7 @@ public class TileHighlighter : MonoBehaviour
             return;
 
         mercenary = Instantiate(mercenary);
-        mercenary.transform.position = highlight.transform.position+TilemapManager.instance.offset;
+        mercenary.transform.position = highlight.transform.position+TilemapManager.Instance.offset;
         isSpawn =true;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class DefaultTile : TileBase
+public class PathFinding : MonoBehaviour
 {
-
+    Tilemap tilemap;
 }

@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492435795687a7849a4887450fb1cafb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveRange: 3
+  moveRange: 4
   attackRange: 0
   skillRange: 0
   movableTile: {fileID: 922214244242343332, guid: 464e5cab4096b784d9f5614621402894, type: 3}

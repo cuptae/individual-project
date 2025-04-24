@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3595909182736759692}
   - component: {fileID: 7445397802060105585}
+  - component: {fileID: 7727473175784034132}
   m_Layer: 0
-  m_Name: SelectedTile
+  m_Name: OverlayTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,3 +85,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7727473175784034132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 922214244242343332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f4c0fa46ecc524d83102c4533bbaf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridPosition: {x: 0, y: 0}
+  isWalkable: 1
+  previousTile: {fileID: 0}
+  gCost: 0
+  hCost: 0
