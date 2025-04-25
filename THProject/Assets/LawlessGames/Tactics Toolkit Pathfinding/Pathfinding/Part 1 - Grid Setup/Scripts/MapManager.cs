@@ -7,18 +7,21 @@ namespace finished1
 {
     public class MapManager : MonoBehaviour
     {
+        #region Singleton
         private static MapManager _instance;
         public static MapManager Instance { get { return _instance; } }
+        #endregion
 
-        public GameObject overlayPrefab;
-        public GameObject overlayContainer;
+        public GameObject overlayPrefab; //오버레이 프리팹
+        public GameObject overlayContainer;//오버레이 컨테이너
 
-        public float littleBump;
+        public float littleBump;//
 
-        public Dictionary<Vector2Int, GameObject> map;
+        public Dictionary<Vector2Int, GameObject> map;//타일맵
 
         private void Awake()
         {
+            //Singleton
             if(_instance != null && _instance != this)
             {
                 Destroy(this.gameObject);
@@ -32,7 +35,7 @@ namespace finished1
         void Start()
         {
             littleBump = 0.0003f;
-            var tileMap = gameObject.GetComponentInChildren<Tilemap>();
+            var tileMap = gameObject.GetComponentInChildren<Tilemap>();//타일맵 컴포넌트 가져오기
             map = new Dictionary<Vector2Int, GameObject>();
 
             BoundsInt bounds = tileMap.cellBounds;

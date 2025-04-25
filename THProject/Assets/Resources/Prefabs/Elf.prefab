@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 8462538923197786043}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -97,7 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492435795687a7849a4887450fb1cafb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveRange: 4
-  attackRange: 0
-  skillRange: 0
-  movableTile: {fileID: 922214244242343332, guid: 464e5cab4096b784d9f5614621402894, type: 3}
+  moveRange: 1
+  onOverlayTile: {fileID: 0}

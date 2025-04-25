@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class OverlayTile : MonoBehaviour
 {
-    public Vector2Int gridPosition;
-    public bool isWalkable = true;
-    public OverlayTile previousTile;
-    public int gCost;
-    public int hCost;
-    public int FCost => gCost + hCost;
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+        }
+    }
 }
