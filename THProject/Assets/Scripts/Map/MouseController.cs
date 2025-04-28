@@ -1,10 +1,26 @@
 using System.Linq;
 using UnityEngine;
 
-public class TileHighlighter : MonoBehaviour
+
+public enum MouseMode
+{
+    None,
+    MercenarySpawn,
+    MercenaryMove,
+    Attack,
+    Skill,
+    Item,
+    EndTurn
+}
+
+public class MouseController : MonoBehaviour
 {
     public GameObject tileHighlight; // 커서 오브젝트
     public GameObject mercenaryPrefab; // 병사 프리팹
+    public GameObject overlayTile; // 마우스 오버레이 타일
+    public Vector3 offset = new Vector3(0, 0.25f, 0); // 타일 오프셋
+
+    public MouseMode mouseMode = MouseMode.None; // 마우스 모드
     void Awake()
     {
         
@@ -19,12 +35,12 @@ public class TileHighlighter : MonoBehaviour
         // Update is called once per frame
         void LateUpdate()
         {
-            //TileHighlight();
             RaycastHit2D? hit = GetFocusedOnTile();
 
             if (hit.HasValue)
             {
                 GameObject overlayTile = hit.Value.collider.gameObject;
+                this.overlayTile = overlayTile;
                 tileHighlight.transform.position = overlayTile.transform.position;
                 tileHighlight.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
 
@@ -51,28 +67,11 @@ public class TileHighlighter : MonoBehaviour
         }
         public void MercenarySpawn()
         {
-            Instantiate(mercenaryPrefab, tileHighlight.transform.position, Quaternion.identity);
+            if(mouseMode != MouseMode.MercenarySpawn)
+            {
+                return;
+            }
+            Instantiate(mercenaryPrefab, overlayTile.transform.position+offset, Quaternion.identity);
+            mouseMode = MouseMode.MercenaryMove;
         }
-
-
-
-
-
-
-
-
-        // public void TileHighlight()
-        // {
-        //     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //     Vector3Int girdPos = TilemapManager.Instance.tileMap.WorldToCell(mousePos);
-        //     Vector2Int girdPos2D = new Vector2Int(girdPos.x, girdPos.y);
-        //     //Vector3 worldPos = TilemapManager.Instance.tileMap.GetCellCenterWorld(girdPos);
-        //     Debug.Log($"mosuePos{mousePos} girdPos:{girdPos}");
-            
-        //     Vector3 yoffset = new Vector3(0, 2.5f, 0);
-        //     if(TilemapManager.Instance.map.ContainsKey(girdPos2D))
-        //     {
-        //        tileHighlight.transform.position = TilemapManager.Instance.map[girdPos2D].transform.position-yoffset;
-        //     }
-        // }
 }

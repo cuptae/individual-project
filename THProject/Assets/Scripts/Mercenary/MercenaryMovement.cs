@@ -35,7 +35,7 @@ public class MercenaryMovement : MonoBehaviour
             GameObject overlayTile = tile.Value;
 
             // 맨해튼 거리 계산
-            if (Mathf.Abs(cellPos.x - originCell2D.x) + Mathf.Abs(cellPos.y - originCell2D.y) <= range)
+            if (Mathf.Abs(cellPos.x - originCell2D.x) + Mathf.Abs(cellPos.y - originCell2D.y) <= moveRange)
             {
                 overlayTile.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f); // 이동 가능한 타일 반투명 처리
             }
