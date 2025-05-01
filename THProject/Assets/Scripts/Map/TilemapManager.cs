@@ -8,7 +8,7 @@ using UnityEngine.Tilemaps;
 public class TilemapManager : MonoSingleton<TilemapManager>
 {
 
-    public GameObject overlayPrefab; //오버레이 프리팹
+    public OverlayTile overlayTile; //오버레이 프리팹
     public GameObject overlayContainer;//오버레이 컨테이너
 
 
@@ -39,7 +39,8 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                         if (tm.HasTile(tileLocation) && !map.ContainsKey(tileKey))
                         {   
                             Debug.Log("Tile Found: " + tileLocation);
-                            GameObject overlayTile = Instantiate(overlayPrefab, overlayContainer.transform);
+                            GameObject overlayTile = Instantiate(this.overlayTile.gameObject, overlayContainer.transform);
+                            overlayTile.GetComponent<OverlayTile>().gridLocation = tileLocation;
                             Vector3 cellWorldPosition = tm.GetCellCenterWorld(tileLocation);
                             overlayTile.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z+1);
                             overlayTile.GetComponent<SpriteRenderer>().sortingOrder = tm.GetComponent<TilemapRenderer>().sortingOrder;

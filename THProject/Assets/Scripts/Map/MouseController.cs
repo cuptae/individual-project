@@ -4,23 +4,20 @@ using UnityEngine;
 
 public enum MouseMode
 {
-    None,
-    MercenarySpawn,
+    MercenarySpawn = 1,
     MercenaryMove,
-    Attack,
-    Skill,
-    Item,
-    EndTurn
 }
 
 public class MouseController : MonoBehaviour
 {
     public GameObject tileHighlight; // 커서 오브젝트
-    public GameObject mercenaryPrefab; // 병사 프리팹
-    public GameObject overlayTile; // 마우스 오버레이 타일
+    public Mercenary mercenary; // 병사 프리팹
+    public OverlayTile overlayTile; // 마우스 오버레이 타일
     public Vector3 offset = new Vector3(0, 0.25f, 0); // 타일 오프셋
+    public MouseMode curMode = MouseMode.MercenarySpawn; // 마우스 모드
 
-    public MouseMode mouseMode = MouseMode.None; // 마우스 모드
+    
+
     void Awake()
     {
         
@@ -32,24 +29,40 @@ public class MouseController : MonoBehaviour
         tileHighlight = Instantiate(tileHighlight, Vector3.zero, Quaternion.identity);
     }
 
-        // Update is called once per frame
-        void LateUpdate()
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.F1))
         {
-            RaycastHit2D? hit = GetFocusedOnTile();
+            ChangeMouseMode(MouseMode.MercenarySpawn);
+        }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            ChangeMouseMode(MouseMode.MercenaryMove);
+        }
+    }
 
-            if (hit.HasValue)
+    // Update is called once per frame
+    void LateUpdate()
+    {
+        RaycastHit2D? hit = GetFocusedOnTile();
+
+        if (hit.HasValue)
+        {
+            GameObject overlayTile = hit.Value.collider.gameObject;
+            this.overlayTile = overlayTile.GetComponent<OverlayTile>();
+            tileHighlight.transform.position = overlayTile.transform.position;
+            tileHighlight.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
+
+            if (Input.GetMouseButtonDown(0)&&curMode == MouseMode.MercenarySpawn)
             {
-                GameObject overlayTile = hit.Value.collider.gameObject;
-                this.overlayTile = overlayTile;
-                tileHighlight.transform.position = overlayTile.transform.position;
-                tileHighlight.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    MercenarySpawn();
-                }
+                MercenarySpawn();
+            }
+            if (Input.GetMouseButtonDown(0) && curMode == MouseMode.MercenaryMove)
+            {
+                mercenary.MoveToTile(overlayTile.GetComponent<OverlayTile>());
             }
         }
+    }
 
         public RaycastHit2D? GetFocusedOnTile()
         {
@@ -65,13 +78,22 @@ public class MouseController : MonoBehaviour
 
             return null;
         }
+
         public void MercenarySpawn()
         {
-            if(mouseMode != MouseMode.MercenarySpawn)
+            if(curMode == MouseMode.MercenarySpawn&&overlayTile.isOnObject == false)
             {
-                return;
+                mercenary = Instantiate(mercenary, overlayTile.transform.position + offset, Quaternion.identity);
+                mercenary.currentTile = overlayTile.GetComponent<OverlayTile>();
+                mercenary.currentTile.gridLocation = overlayTile.GetComponent<OverlayTile>().gridLocation;
+                mercenary.currentTile.isOnObject = true;
+                mercenary.ShowMoveRange();
+                MercenaryManager.Instance.mercenaryList.Add(mercenary);
             }
-            Instantiate(mercenaryPrefab, overlayTile.transform.position+offset, Quaternion.identity);
-            mouseMode = MouseMode.MercenaryMove;
+        }
+
+        public void ChangeMouseMode(MouseMode mode)
+        {
+            curMode = mode;
         }
 }

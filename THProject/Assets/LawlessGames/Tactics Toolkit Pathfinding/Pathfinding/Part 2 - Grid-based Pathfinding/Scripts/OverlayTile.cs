@@ -29,5 +29,6 @@ namespace finished2
             gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
         }
 
+
     }
 }

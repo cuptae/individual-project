@@ -11,7 +11,7 @@ namespace finished2
         public static MapManager Instance { get { return _instance; } }
 
 
-        public GameObject overlayPrefab;
+        public OverlayTile overlayPrefab;
         public GameObject overlayContainer;
 
         public Dictionary<Vector2Int, OverlayTile> map;
@@ -47,6 +47,7 @@ namespace finished2
                                 if (!map.ContainsKey(new Vector2Int(x, y)))
                                 {
                                     var overlayTile = Instantiate(overlayPrefab, overlayContainer.transform);
+                                    overlayTile.gridLocation = new Vector3Int(x, y, z);
                                     var cellWorldPosition = tm.GetCellCenterWorld(new Vector3Int(x, y, z));
                                     overlayTile.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z + 1);
                                     overlayTile.GetComponent<SpriteRenderer>().sortingOrder = tm.GetComponent<TilemapRenderer>().sortingOrder;
