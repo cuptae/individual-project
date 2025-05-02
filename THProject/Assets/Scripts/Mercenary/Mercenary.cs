@@ -9,9 +9,12 @@ public class Mercenary : MonoBehaviour
     public int moveRange = 3; // 이동 범위
     MouseController mouseController; // 마우스 컨트롤러
     public bool isSelected = false; // 선택 여부
+    Pathfinding pathfinding; // 경로 탐색기
+    public bool isMoving = false; // 이동 중 여부
     void Awake()
     {
         mouseController = GameObject.FindWithTag("MouseCtrl").GetComponent<MouseController>();
+        pathfinding = new Pathfinding();
     }
 
     public void ShowMoveRange()
@@ -34,10 +37,11 @@ public class Mercenary : MonoBehaviour
 
     public void MoveToTile(OverlayTile targetTile)
     {
+        if (isMoving) return; // 이미 이동 중이면 무시
         if(mouseController.curMode != MouseMode.MercenaryMove) return;
         if (!targetTile.isOnMoveRange) return;
 
-        var path = new Pathfinding().FindPath(currentTile, targetTile);
+        var path = pathfinding.FindPath(currentTile, targetTile);
 
         if (path != null)
         {
@@ -47,12 +51,26 @@ public class Mercenary : MonoBehaviour
 
     IEnumerator FollowPath(List<OverlayTile> path)
     {
+        isMoving = true;
+
         foreach (var tile in path)
         {
-            transform.position = tile.transform.position + new Vector3(0, 0.25f, 0);
-            yield return new WaitForSeconds(0.1f);
+            Vector3 startPos = transform.position;
+            Vector3 endPos = tile.transform.position + new Vector3(0, 0.25f, 0);
+            float elapsedTime = 0f;
+            float duration = 0.2f; // 이동 시간 (조절 가능)
+
+            while (elapsedTime < duration)
+            {
+                transform.position = Vector3.Lerp(startPos, endPos, elapsedTime / duration);
+                elapsedTime += Time.deltaTime;
+                yield return null; // 다음 프레임까지 대기
+            }
+
+            transform.position = endPos; // 보정
         }
 
+        isMoving = false;
         currentTile.isOnObject = false;
         currentTile = path.Last();
         currentTile.isOnObject = true;
