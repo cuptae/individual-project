@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -13,7 +14,6 @@ public class MouseController : MonoBehaviour
     public GameObject tileHighlight; // 커서 오브젝트
     public Mercenary mercenary; // 병사 프리팹
     public OverlayTile overlayTile; // 마우스 오버레이 타일
-    public Vector3 offset = new Vector3(0, 0.25f, 0); // 타일 오프셋
     public MouseMode curMode = MouseMode.MercenarySpawn; // 마우스 모드
 
     
@@ -83,10 +83,10 @@ public class MouseController : MonoBehaviour
         {
             if(curMode == MouseMode.MercenarySpawn&&overlayTile.isOnObject == false)
             {
-                mercenary = Instantiate(mercenary, overlayTile.transform.position + offset, Quaternion.identity);
+                mercenary = Instantiate(mercenary, overlayTile.transform.position, Quaternion.identity);
                 mercenary.currentTile = overlayTile.GetComponent<OverlayTile>();
                 mercenary.currentTile.gridLocation = overlayTile.GetComponent<OverlayTile>().gridLocation;
-                mercenary.currentTile.isOnObject = true;
+                mercenary.currentTile.CheckIsOnObject();
                 mercenary.ShowMoveRange();
                 MercenaryManager.Instance.mercenaryList.Add(mercenary);
             }

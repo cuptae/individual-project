@@ -38,7 +38,6 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                         var tileKey = new Vector2Int(x, y);
                         if (tm.HasTile(tileLocation) && !map.ContainsKey(tileKey))
                         {   
-                            Debug.Log("Tile Found: " + tileLocation);
                             GameObject overlayTile = Instantiate(this.overlayTile.gameObject, overlayContainer.transform);
                             overlayTile.GetComponent<OverlayTile>().gridLocation = tileLocation;
                             Vector3 cellWorldPosition = tm.GetCellCenterWorld(tileLocation);
@@ -50,6 +49,34 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                 }
             }
         }
+    }
+
+    public OverlayTile GetTileAtPosition(Vector2Int pos)
+    {
+        if (map.TryGetValue(pos, out GameObject tileObj))
+        {
+            return tileObj.GetComponent<OverlayTile>();
+        }
+        return null;
+    }
+
+    public List<OverlayTile> Get4DirectionalNeighbors(OverlayTile tile)
+    {
+        List<OverlayTile> neighbors = new List<OverlayTile>();
+        Vector2Int[] dirs = new Vector2Int[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right};
+
+        foreach (var dir in dirs)
+        {
+            Vector2Int tilePos = new Vector2Int(tile.gridLocation.x, tile.gridLocation.y);
+            Vector2Int checkPos = tilePos + dir;
+            if (TilemapManager.Instance.map.TryGetValue(checkPos, out GameObject tileObj))
+            {
+                OverlayTile neighbor = tileObj.GetComponent<OverlayTile>();
+                neighbors.Add(neighbor);
+            }
+        }
+
+        return neighbors;
     }
 }
 

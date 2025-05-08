@@ -1978,7 +1978,6 @@ MonoBehaviour:
   tileHighlight: {fileID: 0}
   mercenary: {fileID: 5502271516316590054, guid: 63c5c5bf29a1d5f4cb6ec3934fb98ca8, type: 3}
   overlayTile: {fileID: 0}
-  offset: {x: 0, y: 0.25, z: 0}
   curMode: 1
 --- !u!4 &2082921392
 Transform:

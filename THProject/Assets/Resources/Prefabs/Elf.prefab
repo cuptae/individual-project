@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6336360065000821151}
   - component: {fileID: 2956757046196931451}
   - component: {fileID: 5502271516316590054}
-  - component: {fileID: 7283236436789696411}
+  - component: {fileID: 562114708792985566}
   m_Layer: 0
   m_Name: Elf
   m_TagString: Untagged
@@ -98,15 +98,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdf86bb928cef174c89e36cfb7b3ccab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data:
+    hp: 0
+    attackPower: 0
+    moverange: 3
+    attackRange: 1
   currentTile: {fileID: 0}
-  moveRange: 3
---- !u!65 &7283236436789696411
-BoxCollider:
+  isSelected: 0
+--- !u!61 &562114708792985566
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8462538923197786043}
+  m_Enabled: 1
+  m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -115,9 +122,31 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.3, y: 0.5, z: 0.2}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 0.5, y: 0.5}
+    newSize: {x: 0.5, y: 0.5}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.2, y: 0.2}
+  m_EdgeRadius: 0

@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[System.Serializable]
+public class MercenaryData
+{
+    public int hp;
+    public int attackPower;
+    public int moverange;
+    public int attackRange;
+}
+
 public class Mercenary : MonoBehaviour
 {
+    public MercenaryData data; // 용병 데이터
     public OverlayTile currentTile; // 현재 타일
-    public int moveRange = 3; // 이동 범위
     MouseController mouseController; // 마우스 컨트롤러
     public bool isSelected = false; // 선택 여부
     Pathfinding pathfinding; // 경로 탐색기
-    public bool isMoving = false; // 이동 중 여부
+    private bool isMoving = false; // 이동 중 여부
     void Awake()
     {
         mouseController = GameObject.FindWithTag("MouseCtrl").GetComponent<MouseController>();
@@ -19,18 +28,75 @@ public class Mercenary : MonoBehaviour
 
     public void ShowMoveRange()
     {
-        Vector2Int origin = new Vector2Int(currentTile.gridLocation.x, currentTile.gridLocation.y);
+        Queue<OverlayTile> frontier = new Queue<OverlayTile>();
+        Dictionary<OverlayTile, int> visited = new Dictionary<OverlayTile, int>();
 
-        foreach (var tilePair in TilemapManager.Instance.map)
+        OverlayTile startTile = currentTile;
+        frontier.Enqueue(startTile);
+        visited[startTile] = 0;
+
+        while (frontier.Count > 0)
         {
-            Vector2Int tilePos = tilePair.Key;
-            GameObject tileObj = tilePair.Value;
-            OverlayTile overlayTile = tileObj.GetComponent<OverlayTile>();
+            var current = frontier.Dequeue();
+            int currentCost = visited[current];
 
-            int distance = Mathf.Abs(tilePos.x - origin.x) + Mathf.Abs(tilePos.y - origin.y);
-            if (distance <= moveRange)
+            current.ShowTile();
+
+            if (currentCost >= data.moverange)
+                continue;
+
+            foreach (var neighbor in TilemapManager.Instance.Get4DirectionalNeighbors(current))
             {
-                overlayTile.ShowTile();
+                if (neighbor.isBlocked) continue;
+                if (visited.ContainsKey(neighbor)) continue;
+
+                visited[neighbor] = currentCost + 1;
+                frontier.Enqueue(neighbor);
+            }
+        }
+        ShowAttackRange();
+    }
+
+    public void ShowAttackRange()
+    {
+        Debug.Log("S");
+        Queue<OverlayTile> frontier = new Queue<OverlayTile>();
+        Dictionary<OverlayTile, int> visited = new Dictionary<OverlayTile, int>();
+
+        OverlayTile startTile = currentTile;
+        frontier.Enqueue(startTile);
+        visited[startTile] = 0;
+
+        while(frontier.Count>0)
+        {
+            var current = frontier.Dequeue();
+            int currentCost = visited[current];
+
+            current.DrawTileOutline();
+
+            if(currentCost>=data.attackRange)
+             continue;
+
+            foreach(var neighbor in TilemapManager.Instance.Get4DirectionalNeighbors(current))
+            {
+                if(neighbor.isBlocked) continue;
+                if (visited.ContainsKey(neighbor)) continue;
+
+                visited[neighbor] = currentCost + 1;
+                frontier.Enqueue(neighbor);
+            }
+        }
+    }
+
+    public void HideMoveRange()
+    {
+        foreach (var tile in TilemapManager.Instance.map.Values)
+        {
+            var overlayTile = tile.GetComponent<OverlayTile>();
+            if (overlayTile.isOnMoveRange)
+            {
+                overlayTile.HideTile();
+                overlayTile.EraseTileOutLine();
             }
         }
     }
@@ -52,11 +118,11 @@ public class Mercenary : MonoBehaviour
     IEnumerator FollowPath(List<OverlayTile> path)
     {
         isMoving = true;
-
+        OverlayTile previousTile = currentTile;
         foreach (var tile in path)
         {
             Vector3 startPos = transform.position;
-            Vector3 endPos = tile.transform.position + new Vector3(0, 0.25f, 0);
+            Vector3 endPos = tile.transform.position;
             float elapsedTime = 0f;
             float duration = 0.2f; // 이동 시간 (조절 가능)
 
@@ -71,8 +137,11 @@ public class Mercenary : MonoBehaviour
         }
 
         isMoving = false;
-        currentTile.isOnObject = false;
+        previousTile.CheckIsOnObject();
         currentTile = path.Last();
-        currentTile.isOnObject = true;
+        currentTile.CheckIsOnObject();
+        HideMoveRange();
+
+        ShowMoveRange();
     }
 }
