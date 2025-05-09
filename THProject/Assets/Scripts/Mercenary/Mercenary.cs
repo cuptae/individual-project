@@ -6,24 +6,26 @@ using UnityEngine;
 [System.Serializable]
 public class MercenaryData
 {
-    public int hp;
+    public int maxHp;
     public int attackPower;
     public int moverange;
     public int attackRange;
 }
 
-public class Mercenary : MonoBehaviour
+public class Mercenary : MonoBehaviour,IDamageable
 {
     public MercenaryData data; // 용병 데이터
     public OverlayTile currentTile; // 현재 타일
+    Pathfinding pathfinding; // 경로 탐색기
     MouseController mouseController; // 마우스 컨트롤러
     public bool isSelected = false; // 선택 여부
-    Pathfinding pathfinding; // 경로 탐색기
     private bool isMoving = false; // 이동 중 여부
+    public int curHp;
     void Awake()
     {
         mouseController = GameObject.FindWithTag("MouseCtrl").GetComponent<MouseController>();
         pathfinding = new Pathfinding();
+        curHp = data.maxHp;
     }
 
     public void ShowMoveRange()
@@ -59,7 +61,7 @@ public class Mercenary : MonoBehaviour
 
     public void ShowAttackRange()
     {
-        Debug.Log("S");
+
         Queue<OverlayTile> frontier = new Queue<OverlayTile>();
         Dictionary<OverlayTile, int> visited = new Dictionary<OverlayTile, int>();
 
@@ -106,7 +108,19 @@ public class Mercenary : MonoBehaviour
         if (isMoving) return; // 이미 이동 중이면 무시
         if(mouseController.curMode != MouseMode.MercenaryMove) return;
         if (!targetTile.isOnMoveRange) return;
-
+        if(targetTile.isOnObject)
+        {
+            GameObject targetObject = targetTile.CheckIsOnObject();
+            if(targetObject != null && targetObject.GetComponent<IDamageable>() is IDamageable damageable)
+            {
+                Attack(damageable);
+                return;
+            }
+        }
+        else if(!targetTile.isOnObject)
+        {
+            Debug.Log("없다");
+        }
         var path = pathfinding.FindPath(currentTile, targetTile);
 
         if (path != null)
@@ -144,4 +158,28 @@ public class Mercenary : MonoBehaviour
 
         ShowMoveRange();
     }
+
+    public void Attack(IDamageable target)
+    {
+        target.TakeDamage(data.attackPower);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        curHp -=damage;
+        if(curHp<0)
+        {
+            Die();
+        }
+    }
+
+    public void Heal(int healAmount)
+    {
+        curHp += healAmount;
+    }
+    public void Die()
+    {
+        Destroy(gameObject);
+    }
+
 }

@@ -99,12 +99,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
-    hp: 0
-    attackPower: 0
+    maxHp: 100
+    attackPower: 10
     moverange: 3
     attackRange: 1
   currentTile: {fileID: 0}
   isSelected: 0
+  curHp: 0
 --- !u!61 &562114708792985566
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using ExitGames.Client.Photon.StructWrapping;
+using UnityEditor.Overlays;
 using UnityEngine;
 
 
@@ -12,7 +14,7 @@ public enum MouseMode
 public class MouseController : MonoBehaviour
 {
     public GameObject tileHighlight; // 커서 오브젝트
-    public Mercenary mercenary; // 병사 프리팹
+    public Mercenary curMercenary; // 병사 프리팹
     public OverlayTile overlayTile; // 마우스 오버레이 타일
     public MouseMode curMode = MouseMode.MercenarySpawn; // 마우스 모드
 
@@ -48,18 +50,22 @@ public class MouseController : MonoBehaviour
 
         if (hit.HasValue)
         {
-            GameObject overlayTile = hit.Value.collider.gameObject;
-            this.overlayTile = overlayTile.GetComponent<OverlayTile>();
-            tileHighlight.transform.position = overlayTile.transform.position;
-            tileHighlight.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
+            GameObject cusorOnOverlayTile = hit.Value.collider.gameObject;
+            tileHighlight.transform.position = cusorOnOverlayTile.transform.position;
+            tileHighlight.GetComponent<SpriteRenderer>().sortingOrder = cusorOnOverlayTile.GetComponent<SpriteRenderer>().sortingOrder;
 
-            if (Input.GetMouseButtonDown(0)&&curMode == MouseMode.MercenarySpawn)
+            if(Input.GetMouseButtonDown(0))
             {
-                MercenarySpawn();
-            }
-            if (Input.GetMouseButtonDown(0) && curMode == MouseMode.MercenaryMove)
-            {
-                mercenary.MoveToTile(overlayTile.GetComponent<OverlayTile>());
+              overlayTile = cusorOnOverlayTile.GetComponent<OverlayTile>();
+              switch(curMode)
+              {
+                case MouseMode.MercenarySpawn:
+                    MercenarySpawn();
+                    break;
+                case MouseMode.MercenaryMove:
+                    curMercenary.MoveToTile(overlayTile);
+                    break;
+              }   
             }
         }
     }
@@ -83,12 +89,12 @@ public class MouseController : MonoBehaviour
         {
             if(curMode == MouseMode.MercenarySpawn&&overlayTile.isOnObject == false)
             {
-                mercenary = Instantiate(mercenary, overlayTile.transform.position, Quaternion.identity);
-                mercenary.currentTile = overlayTile.GetComponent<OverlayTile>();
-                mercenary.currentTile.gridLocation = overlayTile.GetComponent<OverlayTile>().gridLocation;
-                mercenary.currentTile.CheckIsOnObject();
-                mercenary.ShowMoveRange();
-                MercenaryManager.Instance.mercenaryList.Add(mercenary);
+                curMercenary = Instantiate(curMercenary, overlayTile.transform.position, Quaternion.identity);
+                curMercenary.currentTile = overlayTile.GetComponent<OverlayTile>();
+                curMercenary.currentTile.gridLocation = overlayTile.GetComponent<OverlayTile>().gridLocation;
+                curMercenary.currentTile.CheckIsOnObject();
+                curMercenary.ShowMoveRange();
+                MercenaryManager.Instance.mercenaryList.Add(curMercenary);
             }
         }
 
