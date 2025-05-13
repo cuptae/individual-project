@@ -103,6 +103,7 @@ MonoBehaviour:
     attackPower: 10
     moverange: 3
     attackRange: 1
+  dataSO: {fileID: 11400000, guid: 8f56754cbae547e448451713bc8e06a4, type: 2}
   currentTile: {fileID: 0}
   isSelected: 0
   curHp: 0

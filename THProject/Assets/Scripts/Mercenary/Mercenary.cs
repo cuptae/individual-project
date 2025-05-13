@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[System.Serializable]
-public class MercenaryData
-{
-    public int maxHp;
-    public int attackPower;
-    public int moverange;
-    public int attackRange;
-}
+// [System.Serializable]
+// public class MercenaryData
+// {
+//     public int maxHp;
+//     public int attackPower;
+//     public int moverange;
+//     public int attackRange;
+// }
 
 public class Mercenary : MonoBehaviour,IDamageable
 {
-    public MercenaryData data; // 용병 데이터
+    //public MercenaryData data; // 용병 데이터
+    public MercenaryDataSO dataSO; // 용병 데이터 스크립터블 오브젝트
     public OverlayTile currentTile; // 현재 타일
     Pathfinding pathfinding; // 경로 탐색기
     MouseController mouseController; // 마우스 컨트롤러
@@ -25,7 +26,7 @@ public class Mercenary : MonoBehaviour,IDamageable
     {
         mouseController = GameObject.FindWithTag("MouseCtrl").GetComponent<MouseController>();
         pathfinding = new Pathfinding();
-        curHp = data.maxHp;
+        curHp = dataSO.maxHp;
     }
 
     public void ShowMoveRange()
@@ -44,7 +45,7 @@ public class Mercenary : MonoBehaviour,IDamageable
 
             current.ShowTile();
 
-            if (currentCost >= data.moverange)
+            if (currentCost >= dataSO.moverange)
                 continue;
 
             foreach (var neighbor in TilemapManager.Instance.Get4DirectionalNeighbors(current))
@@ -56,38 +57,7 @@ public class Mercenary : MonoBehaviour,IDamageable
                 frontier.Enqueue(neighbor);
             }
         }
-        ShowAttackRange();
-    }
-
-    public void ShowAttackRange()
-    {
-
-        Queue<OverlayTile> frontier = new Queue<OverlayTile>();
-        Dictionary<OverlayTile, int> visited = new Dictionary<OverlayTile, int>();
-
-        OverlayTile startTile = currentTile;
-        frontier.Enqueue(startTile);
-        visited[startTile] = 0;
-
-        while(frontier.Count>0)
-        {
-            var current = frontier.Dequeue();
-            int currentCost = visited[current];
-
-            current.DrawTileOutline();
-
-            if(currentCost>=data.attackRange)
-             continue;
-
-            foreach(var neighbor in TilemapManager.Instance.Get4DirectionalNeighbors(current))
-            {
-                if(neighbor.isBlocked) continue;
-                if (visited.ContainsKey(neighbor)) continue;
-
-                visited[neighbor] = currentCost + 1;
-                frontier.Enqueue(neighbor);
-            }
-        }
+        //ShowAttackRange();
     }
 
     public void HideMoveRange()
@@ -116,10 +86,6 @@ public class Mercenary : MonoBehaviour,IDamageable
                 Attack(damageable);
                 return;
             }
-        }
-        else if(!targetTile.isOnObject)
-        {
-            Debug.Log("없다");
         }
         var path = pathfinding.FindPath(currentTile, targetTile);
 
@@ -161,7 +127,7 @@ public class Mercenary : MonoBehaviour,IDamageable
 
     public void Attack(IDamageable target)
     {
-        target.TakeDamage(data.attackPower);
+        target.TakeDamage(dataSO.attackPower);
     }
 
     public void TakeDamage(int damage)
@@ -172,7 +138,6 @@ public class Mercenary : MonoBehaviour,IDamageable
             Die();
         }
     }
-
     public void Heal(int healAmount)
     {
         curHp += healAmount;
@@ -181,5 +146,37 @@ public class Mercenary : MonoBehaviour,IDamageable
     {
         Destroy(gameObject);
     }
+
+
+    // public void ShowAttackRange()
+    // {
+
+    //     Queue<OverlayTile> frontier = new Queue<OverlayTile>();
+    //     Dictionary<OverlayTile, int> visited = new Dictionary<OverlayTile, int>();
+
+    //     OverlayTile startTile = currentTile;
+    //     frontier.Enqueue(startTile);
+    //     visited[startTile] = 0;
+
+    //     while(frontier.Count>0)
+    //     {
+    //         var current = frontier.Dequeue();
+    //         int currentCost = visited[current];
+
+    //         current.DrawTileOutline();
+
+    //         if(currentCost>=data.attackRange)
+    //          continue;
+
+    //         foreach(var neighbor in TilemapManager.Instance.Get4DirectionalNeighbors(current))
+    //         {
+    //             if(neighbor.isBlocked) continue;
+    //             if (visited.ContainsKey(neighbor)) continue;
+
+    //             visited[neighbor] = currentCost + 1;
+    //             frontier.Enqueue(neighbor);
+    //         }
+    //     }
+    // }
 
 }

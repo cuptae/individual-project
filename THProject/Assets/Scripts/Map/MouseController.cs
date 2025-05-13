@@ -75,7 +75,7 @@ public class MouseController : MonoBehaviour
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos2d = new Vector2(mousePos.x, mousePos.y);
 
-            RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2d, Vector2.zero);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2d, Vector2.zero,Mathf.Infinity, LayerMask.GetMask("OverlayTile"));
 
             if(hits.Length > 0)
             {
@@ -94,7 +94,6 @@ public class MouseController : MonoBehaviour
                 curMercenary.currentTile.gridLocation = overlayTile.GetComponent<OverlayTile>().gridLocation;
                 curMercenary.currentTile.CheckIsOnObject();
                 curMercenary.ShowMoveRange();
-                MercenaryManager.Instance.mercenaryList.Add(curMercenary);
             }
         }
 

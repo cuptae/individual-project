@@ -23,10 +23,6 @@ public class OverlayTile : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
     }
 
-    void Start()
-    {
-        
-    }
 
     public void ShowTile()
     {

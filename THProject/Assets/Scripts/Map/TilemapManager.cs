@@ -12,12 +12,12 @@ public class TilemapManager : MonoSingleton<TilemapManager>
     public GameObject overlayContainer;//오버레이 컨테이너
 
 
-    public Dictionary<Vector2Int, GameObject> map;//타일맵
+    public Dictionary<Vector2Int, OverlayTile> map;//타일맵
 
     protected override void Awake()
     {
         base.Awake();
-        map = new Dictionary<Vector2Int, GameObject>();
+        map = new Dictionary<Vector2Int, OverlayTile>();
     }
 
     // Start is called before the first frame update
@@ -39,11 +39,12 @@ public class TilemapManager : MonoSingleton<TilemapManager>
                         if (tm.HasTile(tileLocation) && !map.ContainsKey(tileKey))
                         {   
                             GameObject overlayTile = Instantiate(this.overlayTile.gameObject, overlayContainer.transform);
+                            overlayTile.name = tileKey.ToString();
                             overlayTile.GetComponent<OverlayTile>().gridLocation = tileLocation;
                             Vector3 cellWorldPosition = tm.GetCellCenterWorld(tileLocation);
                             overlayTile.transform.position = new Vector3(cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z+1);
                             overlayTile.GetComponent<SpriteRenderer>().sortingOrder = tm.GetComponent<TilemapRenderer>().sortingOrder;
-                            map.Add(tileKey, overlayTile);
+                            map.Add(tileKey, overlayTile.GetComponent<OverlayTile>());
                         }
                     }
                 }
@@ -53,7 +54,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
 
     public OverlayTile GetTileAtPosition(Vector2Int pos)
     {
-        if (map.TryGetValue(pos, out GameObject tileObj))
+        if (map.TryGetValue(pos, out OverlayTile tileObj))
         {
             return tileObj.GetComponent<OverlayTile>();
         }
@@ -69,7 +70,7 @@ public class TilemapManager : MonoSingleton<TilemapManager>
         {
             Vector2Int tilePos = new Vector2Int(tile.gridLocation.x, tile.gridLocation.y);
             Vector2Int checkPos = tilePos + dir;
-            if (TilemapManager.Instance.map.TryGetValue(checkPos, out GameObject tileObj))
+            if (map.TryGetValue(checkPos, out OverlayTile tileObj))
             {
                 OverlayTile neighbor = tileObj.GetComponent<OverlayTile>();
                 neighbors.Add(neighbor);
