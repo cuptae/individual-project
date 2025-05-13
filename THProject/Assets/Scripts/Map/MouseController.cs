@@ -16,6 +16,7 @@ public class MouseController : MonoBehaviour
     public GameObject tileHighlight; // 커서 오브젝트
     public Mercenary curMercenary; // 병사 프리팹
     public OverlayTile overlayTile; // 마우스 오버레이 타일
+    public Vector2Int gridLocation; // 그리드 위치
     public MouseMode curMode = MouseMode.MercenarySpawn; // 마우스 모드
 
     

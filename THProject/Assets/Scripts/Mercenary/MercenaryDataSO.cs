@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Mercenary", menuName = "GameData/MercenaryData")]
 public class MercenaryDataSO : ScriptableObject
 {
+    public Sprite mercenaryPortrait;
     public string mercenaryName;
     public int maxHp;
     public int attackPower;
