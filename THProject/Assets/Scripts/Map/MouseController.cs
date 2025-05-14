@@ -14,7 +14,7 @@ public enum MouseMode
 public class MouseController : MonoBehaviour
 {
     public GameObject tileHighlight; // 커서 오브젝트
-    public Mercenary curMercenary; // 병사 프리팹
+    public Mercenary mercenary; // 병사 프리팹
     public OverlayTile overlayTile; // 마우스 오버레이 타일
     public Vector2Int gridLocation; // 그리드 위치
     public MouseMode curMode = MouseMode.MercenarySpawn; // 마우스 모드
@@ -23,12 +23,11 @@ public class MouseController : MonoBehaviour
 
     void Awake()
     {
-        
+        tileHighlight = Resources.Load("Prefabs/TileHighlight") as GameObject;
     }
     // Start is called before the first frame update
     void Start()
     {
-        tileHighlight = Resources.Load("Prefabs/TileHighlight") as GameObject;
         tileHighlight = Instantiate(tileHighlight, Vector3.zero, Quaternion.identity);
     }
 
@@ -64,42 +63,45 @@ public class MouseController : MonoBehaviour
                     MercenarySpawn();
                     break;
                 case MouseMode.MercenaryMove:
-                    curMercenary.MoveToTile(overlayTile);
+                    MercenaryManager.Instance.curMercenary.MoveToTile(overlayTile);
                     break;
               }   
             }
         }
     }
 
-        public RaycastHit2D? GetFocusedOnTile()
+    public RaycastHit2D? GetFocusedOnTile()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos2d = new Vector2(mousePos.x, mousePos.y);
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2d, Vector2.zero,Mathf.Infinity, LayerMask.GetMask("OverlayTile"));
+
+        if(hits.Length > 0)
         {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 mousePos2d = new Vector2(mousePos.x, mousePos.y);
-
-            RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2d, Vector2.zero,Mathf.Infinity, LayerMask.GetMask("OverlayTile"));
-
-            if(hits.Length > 0)
-            {
-                return hits.OrderByDescending(i => i.collider.transform.position.z).First();
-            }
-
-            return null;
+            return hits.OrderByDescending(i => i.collider.transform.position.z).First();
         }
 
-        public void MercenarySpawn()
+        return null;
+    }
+
+    public void MercenarySpawn()//Test
+    {
+        if(curMode == MouseMode.MercenarySpawn&&overlayTile.isOnObject == false)
         {
-            if(curMode == MouseMode.MercenarySpawn&&overlayTile.isOnObject == false)
-            {
-                curMercenary = Instantiate(curMercenary, overlayTile.transform.position, Quaternion.identity);
-                curMercenary.currentTile = overlayTile.GetComponent<OverlayTile>();
-                curMercenary.currentTile.gridLocation = overlayTile.GetComponent<OverlayTile>().gridLocation;
-                curMercenary.currentTile.CheckIsOnObject();
-                curMercenary.ShowMoveRange();
-            }
+            mercenary = Instantiate(mercenary, overlayTile.transform.position, Quaternion.identity);
+            mercenary.currentTile = overlayTile.GetComponent<OverlayTile>();
+            mercenary.currentTile.gridLocation = overlayTile.GetComponent<OverlayTile>().gridLocation;
+            mercenary.currentTile.CheckIsOnObject();
+            MercenaryManager.Instance.AddMercenary(mercenary);
         }
+    }
 
         public void ChangeMouseMode(MouseMode mode)
         {
             curMode = mode;
         }
+
+
+
 }

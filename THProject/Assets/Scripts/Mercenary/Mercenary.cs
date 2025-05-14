@@ -18,13 +18,13 @@ public class Mercenary : MonoBehaviour,IDamageable
     public MercenaryDataSO dataSO; // 용병 데이터 스크립터블 오브젝트
     public OverlayTile currentTile; // 현재 타일
     Pathfinding pathfinding; // 경로 탐색기
-    MouseController mouseController; // 마우스 컨트롤러
+    //MouseController mouseController; // 마우스 컨트롤러
     public bool isSelected = false; // 선택 여부
     private bool isMoving = false; // 이동 중 여부
     public int curHp;
     void Awake()
     {
-        mouseController = GameObject.FindWithTag("MouseCtrl").GetComponent<MouseController>();
+        //mouseController = GameObject.FindWithTag("MouseCtrl").GetComponent<MouseController>();
         pathfinding = new Pathfinding();
         curHp = dataSO.maxHp;
     }
@@ -76,7 +76,6 @@ public class Mercenary : MonoBehaviour,IDamageable
     public void MoveToTile(OverlayTile targetTile)
     {
         if (isMoving) return; // 이미 이동 중이면 무시
-        if(mouseController.curMode != MouseMode.MercenaryMove) return;
         if (!targetTile.isOnMoveRange) return;
         if(targetTile.isOnObject)
         {
