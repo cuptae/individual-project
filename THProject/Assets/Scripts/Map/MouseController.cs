@@ -89,18 +89,19 @@ public class MouseController : MonoBehaviour
     {
         if(curMode == MouseMode.MercenarySpawn&&overlayTile.isOnObject == false)
         {
-            mercenary = Instantiate(mercenary, overlayTile.transform.position, Quaternion.identity);
-            mercenary.currentTile = overlayTile.GetComponent<OverlayTile>();
-            mercenary.currentTile.gridLocation = overlayTile.GetComponent<OverlayTile>().gridLocation;
-            mercenary.currentTile.CheckIsOnObject();
-            MercenaryManager.Instance.AddMercenary(mercenary);
+            //mercenary = Instantiate(mercenary, overlayTile.transform.position, Quaternion.identity);
+            MercenaryManager.Instance.SpawnMercenary(mercenary,overlayTile);
+            // mercenary.currentTile = overlayTile.GetComponent<OverlayTile>();
+            // mercenary.currentTile.gridLocation = overlayTile.GetComponent<OverlayTile>().gridLocation;
+            // mercenary.currentTile.CheckIsOnObject();
+            // MercenaryManager.Instance.AddMercenary(mercenary);
         }
     }
 
-        public void ChangeMouseMode(MouseMode mode)
-        {
-            curMode = mode;
-        }
+    public void ChangeMouseMode(MouseMode mode)
+    {
+        curMode = mode;
+    }
 
 
 
