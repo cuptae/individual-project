@@ -19,9 +19,31 @@ public class MercenaryManager : MonoSingleton<MercenaryManager>
         }
         myMercenaries.Add(mercenary);
         mercenaryPortraits[myMercenaries.IndexOf(mercenary)].SetPortrait(mercenary.dataSO.mercenaryPortrait);
-        curMercenaryCount++;
+
     }
 
+    public void SpawnMercenary(Mercenary mercenary, OverlayTile tile)
+    {
+        if (myMercenaries.Count >= maxMercenaryCount)
+        {
+            Debug.Log("병사 수가 최대치를 초과했습니다.");
+            return;
+        }
+        Mercenary preMercenary;
+        if(curMercenary != null)
+        {
+            preMercenary = curMercenary;
+            preMercenary.HideMoveRange();
+        }
+        curMercenary = Instantiate(mercenary,tile.transform.position,Quaternion.identity);
+        curMercenary.currentTile = tile.GetComponent<OverlayTile>();
+        curMercenary.currentTile.gridLocation = tile.GetComponent<OverlayTile>().gridLocation;
+        curMercenary.currentTile.CheckIsOnObject();
+        curMercenary.ShowMoveRange();
+    
+        AddMercenary(curMercenary);
+        Debug.Log(myMercenaries.Count);
+    }
     public void ChangeMercenary(Mercenary mercenary)
     {
         if (myMercenaries.Contains(mercenary))
@@ -32,15 +54,5 @@ public class MercenaryManager : MonoSingleton<MercenaryManager>
         {
             Debug.Log("병사가 목록에 없습니다.");
         }
-    }
-
-    public void SpawnMercenary(Mercenary mercenary, OverlayTile tile)
-    {
-        if (curMercenaryCount > maxMercenaryCount)
-        {
-            Debug.Log("병사 수가 최대치를 초과했습니다.");
-            return;
-        }
-
     }
 }
