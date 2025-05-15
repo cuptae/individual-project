@@ -19,7 +19,7 @@ public class Mercenary : MonoBehaviour,IDamageable
     public OverlayTile currentTile; // 현재 타일
     Pathfinding pathfinding; // 경로 탐색기
     //MouseController mouseController; // 마우스 컨트롤러
-    public bool isSelected = false; // 선택 여부
+    public bool isSelected{ get{ return MercenaryManager.Instance.curMercenary == this; } }
     private bool isMoving = false; // 이동 중 여부
     public int curHp;
     void Awake()

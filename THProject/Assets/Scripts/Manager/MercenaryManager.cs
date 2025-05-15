@@ -18,7 +18,7 @@ public class MercenaryManager : MonoSingleton<MercenaryManager>
             return;
         }
         myMercenaries.Add(mercenary);
-        mercenaryPortraits[myMercenaries.IndexOf(mercenary)].SetPortrait(mercenary.dataSO.mercenaryPortrait);
+        mercenaryPortraits[myMercenaries.IndexOf(mercenary)].SetMercenary(mercenary);
 
     }
 
@@ -40,7 +40,6 @@ public class MercenaryManager : MonoSingleton<MercenaryManager>
         curMercenary.currentTile.gridLocation = tile.GetComponent<OverlayTile>().gridLocation;
         curMercenary.currentTile.CheckIsOnObject();
         curMercenary.ShowMoveRange();
-    
         AddMercenary(curMercenary);
         Debug.Log(myMercenaries.Count);
     }
