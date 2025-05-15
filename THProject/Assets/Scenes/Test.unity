@@ -575,7 +575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -613,8 +613,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frame: {fileID: 721589597}
-  portrait: {fileID: 738709545}
   back: {fileID: 915453132}
+  portrait: {fileID: 738709545}
+  mercenary: {fileID: 0}
 --- !u!1 &738709543
 GameObject:
   m_ObjectHideFlags: 0
@@ -2489,7 +2490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2527,8 +2528,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frame: {fileID: 934176176}
-  portrait: {fileID: 1036131600}
   back: {fileID: 861303545}
+  portrait: {fileID: 1036131600}
+  mercenary: {fileID: 0}
 --- !u!1 &986137479
 GameObject:
   m_ObjectHideFlags: 0
@@ -2732,7 +2734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2770,8 +2772,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frame: {fileID: 1286390358}
-  portrait: {fileID: 454555005}
   back: {fileID: 458681638}
+  portrait: {fileID: 454555005}
+  mercenary: {fileID: 0}
 --- !u!1 &1322941355
 GameObject:
   m_ObjectHideFlags: 0
@@ -2885,7 +2888,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2923,8 +2926,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frame: {fileID: 1750382944}
-  portrait: {fileID: 155353219}
   back: {fileID: 986137481}
+  portrait: {fileID: 155353219}
+  mercenary: {fileID: 0}
 --- !u!1 &1844000417
 GameObject:
   m_ObjectHideFlags: 0

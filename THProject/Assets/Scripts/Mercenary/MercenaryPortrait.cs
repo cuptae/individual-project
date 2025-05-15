@@ -18,7 +18,6 @@ public class MercenaryPortrait : MonoBehaviour
     {
         this.mercenary = mercenary;
         portrait.sprite = mercenary.dataSO.mercenaryPortrait;
-        UpdateFrameColor();
     }
         public void UpdateFrameColor()
     {

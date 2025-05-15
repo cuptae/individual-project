@@ -53,20 +53,22 @@ public class MouseController : MonoBehaviour
             GameObject cusorOnOverlayTile = hit.Value.collider.gameObject;
             tileHighlight.transform.position = cusorOnOverlayTile.transform.position;
             tileHighlight.GetComponent<SpriteRenderer>().sortingOrder = cusorOnOverlayTile.GetComponent<SpriteRenderer>().sortingOrder;
+            
+            ClickTile(cusorOnOverlayTile.GetComponent<OverlayTile>());
 
-            if(Input.GetMouseButtonDown(0))
-            {
-              overlayTile = cusorOnOverlayTile.GetComponent<OverlayTile>();
-              switch(curMode)
-              {
-                case MouseMode.MercenarySpawn:
-                    MercenarySpawn();
-                    break;
-                case MouseMode.MercenaryMove:
-                    MercenaryManager.Instance.curMercenary.MoveToTile(overlayTile);
-                    break;
-              }   
-            }
+            // if(Input.GetMouseButtonDown(0))
+            // {
+            //   overlayTile = cusorOnOverlayTile.GetComponent<OverlayTile>();
+            //   switch(curMode)
+            //   {
+            //     case MouseMode.MercenarySpawn:
+            //         MercenarySpawn();
+            //         break;
+            //     case MouseMode.MercenaryMove:
+            //         MercenaryManager.Instance.curMercenary.MoveToTile(overlayTile);
+            //         break;
+            //   }   
+            // }
         }
     }
 
@@ -83,6 +85,32 @@ public class MouseController : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void ClickTile(OverlayTile tile)
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            if(tile.isOnObject)
+            {
+                GameObject targetObject = tile.CheckIsOnObject();
+                if(targetObject.TryGetComponent<Mercenary>(out Mercenary targetMercenary))
+                {
+                    MercenaryManager.Instance.ChangeMercenary(targetMercenary);
+                }
+            }
+            else
+            {   if(curMode == MouseMode.MercenaryMove)
+                {
+                    MercenaryManager.Instance.curMercenary.MoveToTile(tile);
+                }
+                else if(curMode == MouseMode.MercenarySpawn)
+                {
+                    MercenaryManager.Instance.SpawnMercenary(mercenary, tile);
+                }
+            }
+
+        }
     }
 
     public void MercenarySpawn()//Test

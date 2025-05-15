@@ -20,6 +20,7 @@ public class MercenaryManager : MonoSingleton<MercenaryManager>
         myMercenaries.Add(mercenary);
         mercenaryPortraits[myMercenaries.IndexOf(mercenary)].SetMercenary(mercenary);
 
+        MercenaryPortraitUpdate();
     }
 
     public void SpawnMercenary(Mercenary mercenary, OverlayTile tile)
@@ -47,11 +48,22 @@ public class MercenaryManager : MonoSingleton<MercenaryManager>
     {
         if (myMercenaries.Contains(mercenary))
         {
+            curMercenary.HideMoveRange();
             curMercenary = mercenary;
+            curMercenary.ShowMoveRange();
+            MercenaryPortraitUpdate();
         }
         else
         {
             Debug.Log("병사가 목록에 없습니다.");
+        }
+    }
+
+    public void MercenaryPortraitUpdate()
+    {
+        foreach (var portrait in mercenaryPortraits)
+        {
+            portrait.UpdateFrameColor();
         }
     }
 }

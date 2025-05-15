@@ -28,7 +28,7 @@ public class Mercenary : MonoBehaviour,IDamageable
         pathfinding = new Pathfinding();
         curHp = dataSO.maxHp;
     }
-
+    
     public void ShowMoveRange()
     {
         Queue<OverlayTile> frontier = new Queue<OverlayTile>();
@@ -80,11 +80,11 @@ public class Mercenary : MonoBehaviour,IDamageable
         if(targetTile.isOnObject)
         {
             GameObject targetObject = targetTile.CheckIsOnObject();
-            if(targetObject != null && targetObject.GetComponent<IDamageable>() is IDamageable damageable)
-            {
-                Attack(damageable);
-                return;
-            }
+            // if(targetObject != null && targetObject.GetComponent<IDamageable>() is IDamageable damageable)
+            // {
+            //     Attack(damageable);
+            //     return;
+            // }
         }
         var path = pathfinding.FindPath(currentTile, targetTile);
 
