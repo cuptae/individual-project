@@ -43,3 +43,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Map
+    uniqueID: 444050997
+    locked: 0
+  - name: Mercenary
+    uniqueID: 856518673
+    locked: 0
+  - name: Card
+    uniqueID: 3976502461
+    locked: 0
